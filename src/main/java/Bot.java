@@ -13,7 +13,7 @@ public class Bot extends ListenerAdapter{
     public static char prefixAdmin = '!';
 
     public static void main(String[] args) throws LoginException {
-        final String token = "~Token~";
+        final String token = "";
         JDABuilder.createLight(token).addEventListeners(new Commands()).setActivity(Activity.playing("Question Competetion")).build();
     }
 

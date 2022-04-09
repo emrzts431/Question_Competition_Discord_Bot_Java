@@ -25,7 +25,7 @@ public class Commands extends ListenerAdapter {
         }
         else{
             for(Role r : roles){
-                if(r.getName().equals("Bot's") || r.getName().equals("Dijipin Admin") || r.getName().equals("Dijipin Moderatör") || r.getName().equals("Yönetim") || r.getName().equals("Dijipin Yayıncı")){
+                if(r.getName().equals("Bot's")  || r.getName().equals("Dijipin Moderatör") ||r.getName().equals("Dijipin Yönetim") ||  r.getName().equals("Yönetim") || r.getName().equals("Dijipin Yayıncı")){
                     return true;
                 }
             }
@@ -61,23 +61,19 @@ public class Commands extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event){
-        Message msg = event.getMessage();
-        String messageString = msg.getContentRaw();
-        boolean eventOwnerHasAdminRights;
+        if (event.getChannel().getId().equals("959529716090548234") || event.getChannel().getId().equals("958777115375980588")) {
+            Message msg = event.getMessage();
+            String messageString = msg.getContentRaw();
+            boolean eventOwnerHasAdminRights;
 
-        try{
-            eventOwnerHasAdminRights = checkIfUserHaveAdminRoles(event.getMember().getRoles());
-        }
-        catch(NullPointerException e){
-            eventOwnerHasAdminRights = false;
-        }
-
-        if(messageString.length() != 0){
-            if(!eventOwnerHasAdminRights){
-                event.getChannel().deleteMessageById(msg.getId()).queue();
-                System.out.println("Non admin user tried to send message !!");
+            try{
+                eventOwnerHasAdminRights = checkIfUserHaveAdminRoles(event.getMember().getRoles());
             }
-            else {
+            catch(NullPointerException e){
+                eventOwnerHasAdminRights = false;
+            }
+
+            if(messageString.length() != 0){
                 if (messageString.charAt(0) == Bot.prefixAdmin) {
                     if (messageString.equals(Bot.prefixAdmin + "Kazanan " + "A") ||
                             messageString.equals(Bot.prefixAdmin + "Kazanan " + "B") ||
@@ -109,72 +105,74 @@ public class Commands extends ListenerAdapter {
 
                 }
             }
-        }
-        else{
-            try{
-                String messageIDQuestion = msg.getId();
-                this._messagesToDelete.add(messageIDQuestion);
-                event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE6").queue();
-                event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE7").queue();
-                event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE8").queue();
-                event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE9").queue();
-            }
-            catch (Exception e){
-                System.out.println("Non Image message received");
+            else{
+                try{
+                    String messageIDQuestion = msg.getId();
+                    this._messagesToDelete.add(messageIDQuestion);
+                    event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE6").queue();
+                    event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE7").queue();
+                    event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE8").queue();
+                    event.getChannel().addReactionById(messageIDQuestion, "\uD83C\uDDE9").queue();
+                }
+                catch (Exception e){
+                    System.out.println("Non Image message received");
+                }
             }
         }
     }
 
     @Override
     public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
-        String userName = event.getUser().getName();
-        String emojiName = event.getReaction().getReactionEmote().getName();
-        boolean eventOwnerHasAdminRights;
+        if(event.getChannel().getId().equals("958777115375980588") || event.getChannel().getId().equals("959529716090548234")){
+            String userName = event.getUser().getName();
+            String emojiName = event.getReaction().getReactionEmote().getName();
+            boolean eventOwnerHasAdminRights;
 
-        try{
-            eventOwnerHasAdminRights = checkIfUserHaveAdminRoles(event.getMember().getRoles());
-        }
-        catch(NullPointerException e){
-            eventOwnerHasAdminRights = false;
-        }
-        if(!userGaveVote(userName) && !eventOwnerHasAdminRights){
-            allNicks.add(userName);
-            switch (emojiName){
-                case "\uD83C\uDDE6":
-                    nicksA.add(userName);
-                    System.out.println("UserName added");
-                    break;
-                case "\uD83C\uDDE7":
-                    nicksB.add(userName);
-                    System.out.println("UserName added");
-                    break;
-                case "\uD83C\uDDE8":
-                    nicksC.add(userName);
-                    System.out.println("UserName added");
-                    break;
-                case "\uD83C\uDDE9":
-                    nicksD.add(userName);
-                    System.out.println("UserName added");
-                    break;
-                default:
-                    event.getReaction().removeReaction(event.getUser()).queue();
-                    System.out.println("Emoji unknown");
+            try{
+                eventOwnerHasAdminRights = checkIfUserHaveAdminRoles(event.getMember().getRoles());
             }
-        }
-        else if(eventOwnerHasAdminRights){
-            if(isInvalidReaction(emojiName)){
-                event.getReaction().removeReaction(event.getUser()).queue();
-                System.out.println("Attempt to add an invalid reaction is taken cared of!");
+            catch(NullPointerException e){
+                eventOwnerHasAdminRights = false;
+            }
+            if(!userGaveVote(userName) && !eventOwnerHasAdminRights){
+                allNicks.add(userName);
+                switch (emojiName){
+                    case "\uD83C\uDDE6":
+                        nicksA.add(userName);
+                        System.out.println("UserName added");
+                        break;
+                    case "\uD83C\uDDE7":
+                        nicksB.add(userName);
+                        System.out.println("UserName added");
+                        break;
+                    case "\uD83C\uDDE8":
+                        nicksC.add(userName);
+                        System.out.println("UserName added");
+                        break;
+                    case "\uD83C\uDDE9":
+                        nicksD.add(userName);
+                        System.out.println("UserName added");
+                        break;
+                    default:
+                        event.getReaction().removeReaction(event.getUser()).queue();
+                        System.out.println("Emoji unknown");
+                }
+            }
+            else if(eventOwnerHasAdminRights){
+                if(isInvalidReaction(emojiName)){
+                    event.getReaction().removeReaction(event.getUser()).queue();
+                    System.out.println("Attempt to add an invalid reaction is taken cared of!");
+                }
+                else{
+                    System.out.println("Reaction added!");
+                }
             }
             else{
-                System.out.println("Reaction added!");
-            }
-        }
-        else{
-            System.out.println("gave vote");
-            if(!eventOwnerHasAdminRights) {
-                event.getReaction().removeReaction(event.getUser()).queue();
-                System.out.println("Reaction request declined");
+                System.out.println("gave vote");
+                if(!eventOwnerHasAdminRights) {
+                    event.getReaction().removeReaction(event.getUser()).queue();
+                    System.out.println("Reaction request declined");
+                }
             }
         }
     }
