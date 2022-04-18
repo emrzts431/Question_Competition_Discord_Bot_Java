@@ -25,7 +25,7 @@ public class Commands extends ListenerAdapter {
         }
         else{
             for(Role r : roles){
-                if(r.getName().equals("Bot's")  || r.getName().equals("Dijipin Moderatör") ||r.getName().equals("Dijipin Yönetim") ||  r.getName().equals("Yönetim") || r.getName().equals("Dijipin Yayıncı")){
+                if(r.getName().equals("Bot's") || r.getName().equals("Dijipin Moderatör") ||r.getName().equals("Dijipin Yönetim") ||  r.getName().equals("Yönetim") || r.getName().equals("Dijipin Yayıncı") || r.getName().equals("Dijipin Admin")){
                     return true;
                 }
             }
